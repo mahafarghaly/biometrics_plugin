@@ -23,7 +23,7 @@ class SettingsAlert extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Cancel'),
+          child: Text('Dismiss'),
         ),
       ],
     );

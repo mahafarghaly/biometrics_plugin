@@ -1,11 +1,6 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:biometrics_plugin/biometrics_plugin.dart';
-import 'package:biometrics_plugin/view/widgets/settings_alert.dart';
-
-
+import 'package:biometrics_plugin_example/settings_alert.dart';
 import 'package:flutter/material.dart';
-
-import 'main.dart';
 
 class BiometricScreen extends StatefulWidget {
   const BiometricScreen({super.key});
@@ -14,14 +9,14 @@ class BiometricScreen extends StatefulWidget {
   State<BiometricScreen> createState() => _BiometricScreenState();
 }
 
-class _BiometricScreenState extends State<BiometricScreen> with  WidgetsBindingObserver{
+class _BiometricScreenState extends State<BiometricScreen>
+    with WidgetsBindingObserver {
   String _authResult = 'Waiting...';
-
- // final biometricAuth = BiometricAuth();
   final biometricAuth = BiometricAuth();
-   BiometricStatus? status;
+  BiometricStatus? status;
   bool _dialogShown = false;
   bool _isAuthenticated = false;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +25,7 @@ class _BiometricScreenState extends State<BiometricScreen> with  WidgetsBindingO
       authenticateUser();
     });
   }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -44,19 +40,6 @@ class _BiometricScreenState extends State<BiometricScreen> with  WidgetsBindingO
     }
   }
 
-  Future<void> authenticateUser2() async {
-
-    print("=-----88");
-    status = await biometricAuth.authenticate(
-      navigatorKey.currentContext,
-      localizedReason: "Authenticate to use the appooo",
-      userCredentials:{"email":"maha@gmail.com","password":"1234"},
-      stickyAuth: false,
-    );
-    setState(() {
-      _authResult = status.toString();
-    });
-  }
   Future<void> authenticateUser() async {
     if (_isAuthenticated) return;
     print("Authenticating...");
@@ -65,8 +48,7 @@ class _BiometricScreenState extends State<BiometricScreen> with  WidgetsBindingO
     print("=----- Authenticating");
 
     status = await biometricAuth.authenticate(
-      navigatorKey.currentContext,
-      localizedReason: "Authenticate to use the appooo",
+      localizedReason: "Authenticate to use the app",
       userCredentials: {"email": "maha@gmail.com", "password": "1234"},
       stickyAuth: false,
     );
@@ -82,19 +64,13 @@ class _BiometricScreenState extends State<BiometricScreen> with  WidgetsBindingO
     if (status == BiometricStatus.biometricNotActivated && !_dialogShown) {
       _dialogShown = true;
       Future.delayed(Duration(milliseconds: 200), () {
-        showDialog(
-          context: context,
-          builder: (context) => SettingsAlert()
-        );
+        showDialog(context: context, builder: (context) => SettingsAlert());
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Authentication Result: $_authResult'),
-    );
+    return Center(child: Text('Authentication Result: $_authResult'));
   }
 }
-

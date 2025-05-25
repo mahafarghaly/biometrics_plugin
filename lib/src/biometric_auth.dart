@@ -1,30 +1,25 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-
 import 'biometric_status.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
-import 'package:local_auth_android/local_auth_android.dart';
-import 'package:local_auth_darwin/local_auth_darwin.dart';
 
 class BiometricAuth {
   final LocalAuthentication auth = LocalAuthentication();
   final storage = FlutterSecureStorage();
-  Future<BiometricStatus> authenticate(
-    context, {
+
+  Future<BiometricStatus> authenticate({
     String? localizedReason,
     Map<dynamic, dynamic>? userCredentials,
-    bool biometricOnly=false,
-    bool useErrorDialogs=false,
-     bool sensitiveTransaction = true,
+    bool biometricOnly = false,
+    bool useErrorDialogs = false,
+    bool sensitiveTransaction = true,
     bool stickyAuth = true,
-  }) async {
+  }
+  ) async {
     try {
-      // 1. Handle credentials
-      if (userCredentials != null&&userCredentials.isNotEmpty) {
+      if (userCredentials != null && userCredentials.isNotEmpty) {
         final jsonString = jsonEncode(userCredentials);
         await storage.write(key: "userCredentials", value: jsonString);
         print("Credentials saved.");
@@ -34,9 +29,9 @@ class BiometricAuth {
           print("No credentials found in secure storage.");
           return BiometricStatus.dataNotFound;
         }
-        print("Credentials loaded from secure storage.");
+        print("Credentials loaded from secure storage: $storedData");
       }
-      //----
+
       bool canCheckBiometrics = await auth.canCheckBiometrics;
       bool isDeviceSupported = await auth.isDeviceSupported();
       List<BiometricType> availableBiometrics =
@@ -44,25 +39,18 @@ class BiometricAuth {
       if (!canCheckBiometrics || !isDeviceSupported) {
         return BiometricStatus.deviceNotSupported;
       }
-      print("availableBiometricsooo$availableBiometrics");
+      print("availableBiometrics$availableBiometrics");
       late bool authStatus;
       if (availableBiometrics.isEmpty) {
         return BiometricStatus.biometricNotActivated;
       }
       authStatus = await auth.authenticate(
         localizedReason: localizedReason ?? 'Please Authenticate',
-        // authMessages: const <AuthMessages>[
-        //   AndroidAuthMessages(
-        //     signInTitle: 'Oops! Biometric authentication required!',
-        //     cancelButton: 'No thanks',
-        //   ),
-        //   IOSAuthMessages(cancelButton: 'No thanks'),
-        // ],
         options: AuthenticationOptions(
-          biometricOnly: biometricOnly ,
+          biometricOnly: biometricOnly,
           useErrorDialogs: useErrorDialogs,
           stickyAuth: stickyAuth,
-          sensitiveTransaction: sensitiveTransaction
+          sensitiveTransaction: sensitiveTransaction,
         ),
       );
 
