@@ -13,7 +13,6 @@ class BiometricAuth {
     String? localizedReason,
     Map<dynamic, dynamic>? userCredentials,
     bool biometricOnly = false,
-    bool useErrorDialogs = false,
     bool sensitiveTransaction = true,
     bool stickyAuth = true,
   }
@@ -48,7 +47,7 @@ class BiometricAuth {
         localizedReason: localizedReason ?? 'Please Authenticate',
         options: AuthenticationOptions(
           biometricOnly: biometricOnly,
-          useErrorDialogs: useErrorDialogs,
+          useErrorDialogs: false,
           stickyAuth: stickyAuth,
           sensitiveTransaction: sensitiveTransaction,
         ),
