@@ -1,6 +1,6 @@
 name: biometrics_plugin
 description: "A Flutter plugin that provides biometric authentication support using local_auth."
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/mahafarghaly/biometrics_plugin.git
 
 environment:
